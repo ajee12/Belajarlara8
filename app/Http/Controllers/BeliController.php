@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\PemasokModel;
 use App\Models\BeliModel;
 use App\Models\SatuanModel;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class BeliController extends Controller
 {
@@ -21,17 +23,21 @@ class BeliController extends Controller
 
     public function index()
     {
+        // $totalsemua = DB::raw('SUM(addetailbel.qty*adddetailbel.hrgbeli) as totalsemua');
+
         $data = [
             'detail_barang' => $this->BeliModel->detail_Beli(),
             'beli' => $this->BeliModel->dataBeli(),
             'pemasok' => $this->PemasokModel->getdata(),
-            'satuan' => $this->SatuanModel->getData()
+            'satuan' => $this->SatuanModel->getData(),
 
         ];
 
+
+
         return view('beli/v_beli', $data);
     }
-
+    //ini belum jalan
     public function t_beli()
     {
         $iduser = '001';
@@ -46,9 +52,8 @@ class BeliController extends Controller
     public function save_beli()
     {
 
-        //$id_beli = '001';
-        //$str_time = date('ymdHis');
-        //$nobuk = "BL" . "$id_beli" . "$str_time";
+
+
 
         $data = [
             'nobukti' => request()->nobukti,
@@ -59,18 +64,27 @@ class BeliController extends Controller
 
         ];
 
+
         $data2 = [
-            'id_stok' => request(null)->id_stok,
+            'id_stok' => request()->id_stok,
             'qty' => request()->qty,
             'hrgbeli' => request()->hrgbeli,
-            'subtotal' => request(null)->subtotal,
-            'nobukti' => request(null)->nobukti,
-            'ket' => request(null)->ket,
+            'subtotal' => request()->subtotal,
+            'nobukti' => request()->nobukti,
+            'ket' => request()->ket,
+
         ];
 
-        $this->BeliModel->addBeli($data); //$nobuk);
-        $this->BeliModel->adddetailbeli($data2);
-        return redirect()->to('/beli/index')->with('sukses', 'Data Beli Berhasil Di Tambahkan');
+        DB::beginTransaction();
+        try {
+            DB::commit();
+            $this->BeliModel->addBeli($data); //$nobuk);
+            $this->BeliModel->adddetailbeli($data2);
+            return redirect()->to('/beli/index')->with('sukses', 'Data Beli Berhasil Di Tambahkan');
+        } catch (Exception $e) {
+            DB::rollback();
+            return redirect()->to('/beli/index')->with('danger', 'Data tidak Berhasil Di simpan');
+        }
     }
 
 

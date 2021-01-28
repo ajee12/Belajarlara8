@@ -13,7 +13,9 @@ class BeliModel extends Model
 
     public function dataBeli()
     {
-        return DB::table('beli')->leftJoin('pemasok', 'pemasok.id', '=', 'beli.id_pemasok')
+        return DB::table('beli')->leftJoin('pemasok', 'pemasok.id', '=', 'beli.id_pemasok', 'ASC')
+            ->leftJoin('beli_detail', 'beli_detail.nobukti', '=', 'beli.nobukti')
+            ->where('beli.nobukti')
             ->get();
     }
 
@@ -51,8 +53,13 @@ class BeliModel extends Model
         DB::table('beli_detail')->where('id_detail', $id_detail)->delete();
     }
     // kalau mau merelasikan table di di index yang mau direlasi biar nggak lambat ketika data sudah banyak
-    public function table()
-    {
-        DB::commit('beli');
-    }
+    // public function table()
+    // {
+    //     DB::commit();
+    // }
+
+    // public function gettotal()
+    // {
+    //     DB::raw('beli_detail.hrgbeli')->;
+    // }
 }
