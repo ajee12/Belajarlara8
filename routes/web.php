@@ -8,6 +8,7 @@ use App\Http\Controllers\PemasokController;
 use App\Http\Controllers\SatuanController;
 use App\Http\Controllers\PersediaanController;
 use App\Http\Controllers\BeliController;
+use App\Http\Controllers\Master;
 use app\Models\PelangganModel;
 
 
@@ -53,8 +54,13 @@ Route::post('/persediaan/save_persediaan', [PersediaanController::class, 'save_p
 //rouetebeli
 Route::get('/beli/index', [BeliController::class, 'index'])->name('/beli/index');
 Route::post('/beli/save_beli', [BeliController::class, 'save_beli']);
-Route::post('/beli/edit_save/{id_beli}', [BeliController::class, 'edit_save']);
-Route::get('/beli/delete/{id_detail}', [BeliController::class, 'delete']);
+Route::get('/beli/e_beli/{nobukti}', [BeliController::class, 'e_beli']);
+Route::post('/beli/edit_save/{nobukti}', [BeliController::class, 'edit_save']);
+Route::get('/beli/delete/{nobukti}', [BeliController::class, 'delete']);
+
+
+//master
+Route::get('/master/index', [Master::class, 'index'])->name('/master/index');
 
 Auth::routes();
 

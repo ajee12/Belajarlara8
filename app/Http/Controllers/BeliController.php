@@ -6,6 +6,7 @@ use App\Models\PemasokModel;
 use App\Models\BeliModel;
 use App\Models\SatuanModel;
 use Exception;
+use App\Http\Controllers\xss_clean;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -52,10 +53,8 @@ class BeliController extends Controller
     public function save_beli()
     {
 
-
-
-
         $data = [
+
             'nobukti' => request()->nobukti,
             'tgl' => date('Y-m-d'),
             'id_pemasok' => request()->id_pemasok,
@@ -69,7 +68,7 @@ class BeliController extends Controller
             'id_stok' => request()->id_stok,
             'qty' => request()->qty,
             'hrgbeli' => request()->hrgbeli,
-            'subtotal' => request()->subtotal,
+            'subtotal' => request()->hrgbeli * request()->qty,
             'nobukti' => request()->nobukti,
             'ket' => request()->ket,
 
@@ -88,28 +87,45 @@ class BeliController extends Controller
     }
 
 
-    public function e_beli()
-    {
-        return view('beli/v_beli');
-    }
-    public function edit_save($id_beli)
+    public function e_beli($nobukti)
     {
         $data = [
-            'id_beli' => $id_beli,
-            'nobukti' => request()->nobukti,
+            'pengguna' => $this->BeliModel->detailBeli($nobukti),
+            'satuan' => $this->SatuanModel->getData(),
+            'pemasok' => $this->PemasokModel->getdata(),
+
+        ];
+
+        return view('beli/e_beli', $data);
+    }
+    public function edit_save($nobukti)
+    {
+        $data = [
+            'nobukti' => $nobukti,
             'tgl' => date('Y-m-d'),
             'id_pemasok' => request()->id_pemasok,
-            'keterangan' => request()->keterangan
+            'keterangan' => request()->keterangan,
+
+
+        ];
+        $data2 = [
+            'nobukti' => $nobukti,
+            'id_stok' => request()->id_stok,
+            'qty' => request()->qty,
+            'hrgbeli' => request()->hrgbeli,
+            'subtotal' => request()->hrgbeli * request()->qty,
         ];
         $this->BeliModel->editBeli($data);
+        $this->BeliModel->editdetail($data2);
         return redirect()->to('/beli/index')->with('sukses', 'Data Beli Berhasil Di Edit');
     }
 
-    public function  delete($id_detail)
+    public function  delete($nobukti)
     {
 
-        $this->BeliModel->detaildelete($id_detail);
-        return redirect()->to('/beli/index')->with('danger', ' Data Beli Berhasil Di Delete');
+        $this->BeliModel->detaildelete($nobukti);
+        $this->BeliModel->deleteBeli($nobukti);
+        return redirect()->to('/beli/index')->with('danger', 'Data Beli Berhasil Di Delete');
     }
     //
 }

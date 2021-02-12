@@ -120,7 +120,7 @@
                                 <input type="" class="form-control " id="hrgbeli" name="hrgbeli" autofocus value="<?= old('hrgbeli'); ?>" placeholder="Harga" required></input>
                             </div>
                         </div>
-                        <div class="col-sm-2 mt-3">
+                        <div class=" col-sm-2 mt-3">
                             <div class="form-group">
                                 <label>Action</label>
                                 <button type="submit" class="form-control btn btn-success">Simpan</button>
@@ -171,38 +171,44 @@
                                 ?>
                                 @foreach($detail_barang as $db)
                                 <?php
-                                $subtotal = $db->qty * $db->hrgbeli;
+
+                                // $db->subtotal = null;
+                                // $db->subtotal = $db->qty * $db->hrgbeli;
                                 $jml =  $jml + ($db->qty * $db->hrgbeli);
-                                $hasil_rupiah = "Rp " . number_format($db->hrgbeli, 2, ',', '.');
-                                $hasil_semua = "Rp " . number_format($subtotal, 0);
+                                $hasil_rupiah = "Rp " . number_format($db->hrgbeli, 0);
+                                $hasil_semua = "Rp " . number_format($db->subtotal, 0);
                                 $hasil_jml = "Rp " . number_format($jml, 0);
 
                                 ?>
                                 <tr>
                                     <td class="text-center"><?= $n++; ?></td>
                                     <td><?= $db->name_satuan ?></td>
-
                                     <td class="text-center"><?= $db->qty; ?></td>
                                     <td class="text-center"><?= $hasil_rupiah; ?></td>
-                                    <td class="text-center"><?= $hasil_semua; ?></td>
                                     <td class="text-center">
-                                        <form action="/beli/delete/<?= $db->id_detail; ?>" class="d-inline">
+                                        <?= $hasil_semua; ?>
+                                    </td>
+                                    <td class="text-center">
+                                        <form action="/beli/delete/<?= $db->nobukti; ?>" class="d-inline">
                                             @csrf
                                             <input type="hidden" name="_method" value="DELETE">
-                                            <button type="submit" class="btn btn-danger d-inline " onclick="return confirm('apakah anda yakin?');"><i class="fas fa-fw fa-trash"></i> </button>
+                                            <button type="submit" class="btn btn-danger d-inline " onclick="return confirm('apakah anda yakin?');"><i class="fas fa-fw fa-trash"></i></button>
                                         </form>
-                                        <button href=" " class="btn btn-warning" data-toggle="modal" data-target=""> <i class="fa  fa-pencil">Edit</i></button>
+                                        <a href="/beli/e_beli/<?= $db->nobukti; ?>" type="submit" class="btn btn-warning"><i class="fa  fa-pencil">Edit</i></a>
                                     </td>
-
                                 </tr>
-
                                 @endforeach()
                                 </thead>
                             <tfoot class="text-center">
                                 <tr>
                                     <th colspan="4">Total :</th>
                                     <th colspan="2">
-                                        <?= $hasil_jml; ?>
+                                        <?php if (empty($hasil_jml)) {
+                                            echo '0';
+                                        } else {
+                                            echo $hasil_jml;
+                                        }
+                                        ?>
                                     </th>
                                 </tr>
                             </tfoot>

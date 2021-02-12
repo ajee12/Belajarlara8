@@ -14,6 +14,7 @@ class BelajarController extends Controller
     protected $PelangganModel;
     public function __construct()
     {
+        //$this->middleware('auth');
         $this->PelangganModel = new PelangganModel();
     }
     public function index()
