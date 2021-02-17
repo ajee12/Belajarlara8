@@ -3,23 +3,30 @@
 namespace App\Http\Controllers;
 
 use App\Models\PelangganModel;
+use App\Models\DashboardModel;
 use DateTime;
 use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
-
 use function Ramsey\Uuid\v1;
 
 class BelajarController extends Controller
 {
     protected $PelangganModel;
+    protected $DashboardModel;
     public function __construct()
     {
         //$this->middleware('auth');
         $this->PelangganModel = new PelangganModel();
+        $this->DashboardModel = new DashboardModel();
     }
     public function index()
     {
-        return view('belajar.dashboard');
+        $data = [
+            'jml_satuan' => $this->DashboardModel->jml_satuan(),
+            'jml_pemasok' => $this->DashboardModel->jml_pemasok(),
+            'jml_penjualan' => $this->DashboardModel->jml_penjualan()
+        ];
+        return view('belajar.dashboard', $data);
     }
     //
 

@@ -195,6 +195,7 @@
                                             <button type="submit" class="btn btn-danger d-inline " onclick="return confirm('apakah anda yakin?');"><i class="fas fa-fw fa-trash"></i></button>
                                         </form>
                                         <a href="/beli/e_beli/<?= $db->nobukti; ?>" type="submit" class="btn btn-warning"><i class="fa  fa-pencil">Edit</i></a>
+                                        <a href="/beli/print/<?= $db->nobukti; ?>" target="_blank" class="btn btn-s btn-info"><i class="fa fa-print fa-xs"></i> Cetak</a>
                                     </td>
                                 </tr>
                                 @endforeach()

@@ -6,8 +6,7 @@ use App\Models\PemasokModel;
 use App\Models\BeliModel;
 use App\Models\SatuanModel;
 use Exception;
-use App\Http\Controllers\xss_clean;
-use Illuminate\Http\Request;
+use App\Models\PrintModel;
 use Illuminate\Support\Facades\DB;
 
 class BeliController extends Controller
@@ -15,11 +14,13 @@ class BeliController extends Controller
     protected $PemasokModel;
     protected $BeliModel;
     protected $SatuanModel;
+    protected $PrintModel;
     public function __construct()
     {
         $this->PemasokModel = new PemasokModel();
         $this->BeliModel = new BeliModel();
         $this->SatuanModel = new SatuanModel();
+        $this->PrintModel = new PrintModel();
     }
 
     public function index()
@@ -127,5 +128,14 @@ class BeliController extends Controller
         $this->BeliModel->deleteBeli($nobukti);
         return redirect()->to('/beli/index')->with('danger', 'Data Beli Berhasil Di Delete');
     }
+
+    public function print($nobukti)
+    {
+        $data = [
+            'print' => $this->PrintModel->getprint($nobukti)
+        ];
+        return view('print/v_print', $data);
+    }
+    //
     //
 }

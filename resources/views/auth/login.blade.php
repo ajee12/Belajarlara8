@@ -1,5 +1,4 @@
 @extends('layouts.app')
-
 @section('content')
 
 <div class="container">
@@ -16,6 +15,7 @@
 
                         <form method="POST" action="{{ route('login') }}">
                             @csrf
+
 
                             <div class="form-group">
                                 <input type="email" class="form-control" placeholder="Email addres" name="email" id="email" value="">
