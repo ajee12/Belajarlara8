@@ -55,14 +55,17 @@ Route::post('/persediaan/save_persediaan', [PersediaanController::class, 'save_p
 //rouetebeli
 Route::get('/beli/index', [BeliController::class, 'index'])->name('/beli/index');
 Route::post('/beli/save_beli', [BeliController::class, 'save_beli']);
-Route::get('/beli/e_beli/{nobukti}', [BeliController::class, 'e_beli']);
-Route::post('/beli/edit_save/{nobukti}', [BeliController::class, 'edit_save']);
+Route::get('/beli/e_beli/{id_detail}', [BeliController::class, 'e_beli']);
+Route::post('/beli/edit_save/{id_detail}', [BeliController::class, 'edit_save']);
 Route::get('/beli/delete/{nobukti}', [BeliController::class, 'delete']);
 Route::get('/beli/print/{nobukti}', [BeliController::class, 'print']);
 
 //master
-Route::get('/master/index', [MasterController::class, 'index']);
+Route::get('/master/index', [MasterController::class, 'index'])->name('/master/index');
 Route::get('/master/print/{nobukti}', [MasterController::class, 'print']);
+Route::get('/master/e_penjualan/{nobukti}', [MasterController::class, 'e_penjualan'])->name('/master/e_penjualan/{nobukti}');
+Route::post('/master/edit_save/{nobukti}', [MasterController::class, 'edit_save']);
+Route::get('/master/delete/{id_detail}', [MasterController::class, 'delete']);
 
 //print
 

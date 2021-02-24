@@ -88,10 +88,10 @@ class BeliController extends Controller
     }
 
 
-    public function e_beli($nobukti)
+    public function e_beli($id_detail)
     {
         $data = [
-            'pengguna' => $this->BeliModel->detailBeli($nobukti),
+            'pengguna' => $this->BeliModel->edit($id_detail),
             'satuan' => $this->SatuanModel->getData(),
             'pemasok' => $this->PemasokModel->getdata(),
 
@@ -99,10 +99,10 @@ class BeliController extends Controller
 
         return view('beli/e_beli', $data);
     }
-    public function edit_save($nobukti)
+    public function edit_save($id_detail)
     {
         $data = [
-            'nobukti' => $nobukti,
+            'nobukti' => request()->nobukti,
             'tgl' => date('Y-m-d'),
             'id_pemasok' => request()->id_pemasok,
             'keterangan' => request()->keterangan,
@@ -110,7 +110,8 @@ class BeliController extends Controller
 
         ];
         $data2 = [
-            'nobukti' => $nobukti,
+            'id_detail' => $id_detail,
+            'nobukti' => request()->nobukti,
             'id_stok' => request()->id_stok,
             'qty' => request()->qty,
             'hrgbeli' => request()->hrgbeli,
@@ -118,16 +119,16 @@ class BeliController extends Controller
         ];
         $this->BeliModel->editBeli($data);
         $this->BeliModel->editdetail($data2);
-        return redirect()->to('/beli/index')->with('sukses', 'Data Beli Berhasil Di Edit');
+        return redirect()->to('/master/index')->with('sukses', 'Data Beli Berhasil Di Edit');
     }
 
-    public function  delete($nobukti)
-    {
+    // public function  delete($nobukti)
+    // {
 
-        $this->BeliModel->detaildelete($nobukti);
-        $this->BeliModel->deleteBeli($nobukti);
-        return redirect()->to('/beli/index')->with('danger', 'Data Beli Berhasil Di Delete');
-    }
+    //     $this->BeliModel->detaildelete($nobukti);
+    //     return redirect()->to('/beli/index')->with('danger', 'Data Beli Berhasil Di Delete');
+    // }
+
 
     public function print($nobukti)
     {
@@ -136,6 +137,9 @@ class BeliController extends Controller
         ];
         return view('print/v_print', $data);
     }
+
+
+
     //
     //
 }

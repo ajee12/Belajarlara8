@@ -36,9 +36,7 @@
             vertical-align: top;
         }
 
-        .invoice-box table tr td:nth-child(2) {
-            text-align: right;
-        }
+
 
         .invoice-box table tr.top table td {
             padding-bottom: 20px;
@@ -113,6 +111,7 @@
             <tr class="top">
                 <td colspan="2">
                     <table>
+
                         <tr>
                             <td class="title">
                                 <p style="width:100%; max-width:300px; margin-top:-10px">Print Laravel</p>
@@ -137,58 +136,73 @@
                                     </th>
 
                                 </tr>
-                                <tr>
-                                <tr>
-                                    <th>
-                                        Satuan
-                                    </th>
-                                    <td>:</td>
-                                    <td><?= $print->name_satuan; ?></td>
-                                </tr>
-                                <tr>
-                                <tr width="75px">
-                                    <th>
-                                        Quality
-                                    </th>
-                                    <td>:</td>
-                                    <td><?= $print->qty; ?></td>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        Harga
-                                    </th>
-                                    <td>:</td>
-                                    <td><?= 'Rp ' . (number_format($print->hrgbeli, 0)); ?></td>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        Tax
-                                    </th>
-                                    <td>:</td>
-                                    <td>-</td>
-                                </tr>
-
-
 
                         </div>
                     </div>
                 </div>
             </div>
 
-            <?php
-            $total = 0;
-            $total = $total - ($print->qty * $print->hrgbeli);
-            ?>
-            <tr class="total">
-                <th style="width:50%">Subtotal:</th>
-                <td><?php $total = 0;
-                    $total = $total + ($print->hrgbeli * $print->qty);
-                    echo 'Rp ' . number_format($total, 0); ?>
-                </td>
-            </tr>
+
         </table>
 
+        <div class="card-body">
+            <table id="example2" class="table table-bordered table-hover">
+                <thead class="text-center">
+                    <tr>
+                        <th class="nomor" width="">No</th>
+                        <th>Nama Stok</th>
+                        <th>Qty</th>
+                        <th>Harga</th>
+                        <th>Subtotal</th>
 
+                    </tr>
+                <tbody>
+                    <?php $n = 1;
+
+                    $jml = 0;
+                    ?>
+                    @foreach($detail_barang as $db)
+                    <?php
+
+                    if ($pengguna->nobukti === $db->nobukti) {
+                        // $db->subtotal = null;
+                        // $db->subtotal = $db->qty * $db->hrgbeli;
+                        $jml =  $jml + ($db->qty * $db->hrgbeli);
+                        $hasil_rupiah = "Rp " . number_format($db->hrgbeli, 0);
+                        $hasil_semua = "Rp " . number_format($db->subtotal, 0);
+                        $hasil_jml = "Rp " . number_format($jml, 0);
+
+                    ?>
+
+                        <tr>
+                            <td class="text-center"><?= $n++; ?></td>
+                            <td class="text-center"><?= $db->name_satuan ?></td>
+                            <td class="text-center"><?= $db->qty; ?></td>
+                            <td class="text-center"><?= $hasil_rupiah; ?></td>
+                            <td class="text-center">
+                                <?= $hasil_semua; ?>
+                            </td>
+                        </tr>
+                    <?php } else { ?>
+                    <?php } ?>
+
+                    @endforeach()
+                    </thead>
+                <tfoot class="text-center">
+                    <tr>
+                        <th colspan="4">Total :</th>
+                        <th colspan="2">
+                            <?php if (empty($hasil_jml)) {
+                                echo '0';
+                            } else {
+                                echo $hasil_jml;
+                            }
+                            ?>
+                        </th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div> <!-- /.card-body -->
         <script type="text/javascript">
             window.addEventListener("load", window.print());
         </script>

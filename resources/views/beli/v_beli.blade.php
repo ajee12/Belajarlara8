@@ -1,7 +1,7 @@
 @extends('layout.navbar')
 @section('content')
 @section('judul', 'Laravel | Beli')
-@section('title','Welcome table Pembelian')
+@section('title','Form Pembelian')
 <section class="content">
     <div class="container-fluid">
         <div class="row">
@@ -162,7 +162,7 @@
                                     <th>Qty</th>
                                     <th>Harga</th>
                                     <th>Subtotal</th>
-                                    <th>Aksi</th>
+
                                 </tr>
                             <tbody>
                                 <?php $n = 1;
@@ -188,30 +188,12 @@
                                     <td class="text-center">
                                         <?= $hasil_semua; ?>
                                     </td>
-                                    <td class="text-center">
-                                        <form action="/beli/delete/<?= $db->nobukti; ?>" class="d-inline">
-                                            @csrf
-                                            <input type="hidden" name="_method" value="DELETE">
-                                            <button type="submit" class="btn btn-danger d-inline " onclick="return confirm('apakah anda yakin?');"><i class="fas fa-fw fa-trash"></i></button>
-                                        </form>
-                                        <a href="/beli/e_beli/<?= $db->nobukti; ?>" type="submit" class="btn btn-warning"><i class="fa  fa-pencil">Edit</i></a>
-                                        <a href="/beli/print/<?= $db->nobukti; ?>" target="_blank" class="btn btn-s btn-info"><i class="fa fa-print fa-xs"></i> Cetak</a>
-                                    </td>
+
                                 </tr>
                                 @endforeach()
                                 </thead>
                             <tfoot class="text-center">
-                                <tr>
-                                    <th colspan="4">Total :</th>
-                                    <th colspan="2">
-                                        <?php if (empty($hasil_jml)) {
-                                            echo '0';
-                                        } else {
-                                            echo $hasil_jml;
-                                        }
-                                        ?>
-                                    </th>
-                                </tr>
+
                             </tfoot>
                         </table>
                     </div> <!-- /.card-body -->

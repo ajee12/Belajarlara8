@@ -1,8 +1,8 @@
 @extends('layout.navbar')
 @section('content')
-@section('judul', 'Laravel | Edit Beli')
-@section('title','Form Edit Beli')
-<form action="/beli/edit_save/<?= $pengguna->id_detail; ?>" method="POST" enctype="multipart/form-data">
+@section('judul', 'Laravel | Edit Penjualan')
+@section('title', ' Form Edit Penjualan')
+<form action="/master/edit_save/<?= $pengguna->nobukti; ?>" method="POST" enctype="multipart/form-data">
     @csrf
     <section class="content">
         <div class="container-fluid">
@@ -19,7 +19,6 @@
                         <!-- form start -->
 
                         <div class="row">
-
                             <div class="col-sm-4 m-lg-3">
                                 <label></label>
                                 <label>No Bukti</label>
@@ -96,7 +95,7 @@
                             <div class="col-sm-4 m-lg-3">
                                 <label>Nama Stok</label>
                                 <select type="" class="form-control " id="id_stok" name="id_stok">
-                                    <option value="<?= $pengguna->id_stok; ?>"><?= $pengguna->name_satuan; ?></option>
+                                    <option value="">----Stok----</option>
                                     @foreach($satuan as $st)
                                     <option value="<?= $st->id; ?>"><?= $st->name_satuan; ?></option>
                                     @endforeach
@@ -105,13 +104,13 @@
                             <div class="col-sm-2 mt-3">
                                 <div class="form-group">
                                     <label>qty</label>
-                                    <input type="number" value="<?= $pengguna->qty; ?>" class="form-control " id="qty" name="qty" autofocus value="<?= old('qty'); ?>" placeholder="quality" required></input>
+                                    <input type="number" class=" form-control " id=" qty" name="qty" autofocus value="<?= old('qty'); ?>" placeholder="quality" required></input>
                                 </div>
                             </div>
                             <div class="col-sm-3 mt-3">
                                 <div class="form-group">
                                     <label>Harga</label>
-                                    <input type="" value="<?= $pengguna->hrgbeli; ?>" class="form-control " id="hrgbeli" name="hrgbeli" autofocus value="<?= old('hrgbeli'); ?>" placeholder="Harga" required></input>
+                                    <input type="" class="form-control " id="hrgbeli" name="hrgbeli" autofocus value="<?= old('hrgbeli'); ?>" placeholder="Harga" required></input>
                                 </div>
                             </div>
                             <div class=" col-sm-2 mt-3">
@@ -130,4 +129,95 @@
             </div>
     </section>
 </form>
-@endSection()
+@if (session('sukses'))
+<div class="alert alert-success mt-2" role="alert">
+    {{session('sukses') }}.
+    @endif
+    @if (session('danger'))
+    <div class="alert alert-danger mt-2" role="alert">
+        {{session('danger') }}.
+        @endif
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-info">
+                    <div class="card-header">
+                        <h3 class="card-title">Detail</h3>
+                        <!-- /.card-tools -->
+                    </div>
+                    <div class="card-body">
+                        <table id="example2" class="table table-bordered table-hover">
+                            <thead class="text-center">
+                                <tr>
+                                    <th class="nomor" width="50px">No</th>
+                                    <th>Nama Stok</th>
+
+                                    <th>Qty</th>
+                                    <th>Harga</th>
+                                    <th>Subtotal</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            <tbody>
+                                <?php $n = 1;
+
+                                $jml = 0;
+                                ?>
+                                @foreach($detail_barang as $db)
+                                <?php
+                                if ($pengguna->nobukti === $db->nobukti) {
+
+                                    // $db->subtotal = null;
+                                    // $db->subtotal = $db->qty * $db->hrgbeli;
+                                    $jml = $jml + ($db->qty * $db->hrgbeli);
+                                    $hasil_rupiah = "Rp " . number_format($db->hrgbeli, 0);
+                                    $hasil_semua = "Rp " . number_format($db->subtotal, 0);
+                                    $hasil_jml = "Rp " . number_format($jml, 0);
+
+                                ?>
+
+                                    <tr>
+                                        <td class="text-center"><?= $n++; ?></td>
+                                        <td><?= $db->name_satuan ?></td>
+                                        <td class="text-center"><?= $db->qty; ?></td>
+                                        <td class="text-center"><?= $hasil_rupiah; ?></td>
+                                        <td class="text-center">
+                                            <?= $hasil_semua; ?>
+                                        </td>
+                                        <td class="text-center">
+                                            <form action="/master/delete/<?= $db->id_detail; ?>" class="d-inline">
+                                                @csrf
+                                                <input type="hidden" name="_method" value="DELETE">
+                                                <button type="submit" class="btn btn-danger d-inline " onclick="return confirm('apakah anda yakin?');"><i class="fas fa-fw fa-trash"></i></button>
+                                            </form>
+                                            <a href="/beli/e_beli/<?= $db->id_detail; ?>" type="submit" class="btn btn-warning"><i class="fa  fa-pencil">Edit</i></a>
+                                            <a href="/master/print/<?= $db->nobukti; ?>" target="_blank" class="btn btn-s btn-info"><i class="fa fa-print fa-xs"></i> Cetak</a>
+                                        </td>
+                                    </tr>
+                                <?php } else { ?>
+                                <?php } ?>
+
+                                @endforeach()
+                                </thead>
+                            <tfoot class="text-center">
+                                <tr>
+                                    <th colspan="4">Total :</th>
+                                    <th colspan="2">
+                                        <?php if (empty($hasil_jml)) {
+                                            echo '0';
+                                        } else {
+                                            echo $hasil_jml;
+                                        }
+                                        ?>
+                                    </th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div> <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+    </div>
+    @endSection()

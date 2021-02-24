@@ -18,7 +18,12 @@ class BeliModel extends Model
             ->leftJoin('satuan', 'satuan.id', '=', 'beli_detail.id_stok', 'ASC')
             ->get();
     }
+    //menampilakan data tanpa join
 
+    public function beli()
+    {
+        return DB::table('beli')->get();
+    }
     public function detail_Beli()
     {
         return DB::table('beli_detail')->leftJoin('satuan', 'satuan.id', '=', 'beli_detail.id_stok')
@@ -29,12 +34,20 @@ class BeliModel extends Model
     {
         return DB::table('beli_detail')->where('id_detail', $id_detail)->get()->first();
     }
+    //////////////////edit//////////////////////////////////////////////////////////////////
     public function detailBeli($nobukti)
     {
         return DB::table('beli')->leftJoin('pemasok', 'pemasok.id', '=', 'beli.id_pemasok', 'ASC')
             ->leftJoin('beli_detail', 'beli_detail.nobukti', '=', 'beli.nobukti', 'ASC')
             ->leftJoin('satuan', 'satuan.id', '=', 'beli_detail.id_stok', 'ASC')
             ->where('beli_detail.nobukti', $nobukti)->get()->first();
+    }
+    public function edit($id_detail)
+    {
+        return DB::table('beli')->leftJoin('pemasok', 'pemasok.id', '=', 'beli.id_pemasok', 'ASC')
+            ->leftJoin('beli_detail', 'beli_detail.nobukti', '=', 'beli.nobukti', 'ASC')
+            ->leftJoin('satuan', 'satuan.id', '=', 'beli_detail.id_stok', 'ASC')
+            ->where('id_detail', $id_detail)->get()->first();
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////
@@ -56,7 +69,7 @@ class BeliModel extends Model
 
     public function editdetail($data)
     {
-        DB::table('beli_detail')->where('nobukti', $data['nobukti'])->update($data);
+        DB::table('beli_detail')->where('id_detail', $data['id_detail'])->update($data);
     }
     //public function deleteBeli($id_beli)
     //{
@@ -64,15 +77,18 @@ class BeliModel extends Model
     // DB::table('beli')->where('id_beli', $id_beli)->delete();
     //}
     ////////////////////////////////////////////////////////delete/////////////////////////////////
-    public function detaildelete($nobukti)
+    public function detaildelete($id_detail)
     {
-        DB::table('beli_detail')->where('nobukti', $nobukti)->delete();
+        DB::table('beli_detail')
+            ->where('id_detail', $id_detail)
+            ->delete();
     }
 
-    public function deleteBeli($nobukti)
-    {
-        DB::table('beli')->where('nobukti', $nobukti)->delete();
-    }
+    // public function deleteBeli()
+    // {
+    //     DB::table('beli')->delete();
+    // }
+
     // kalau mau merelasikan table di di index yang mau direlasi biar nggak lambat ketika data sudah banyak
     // public function table()
     // {

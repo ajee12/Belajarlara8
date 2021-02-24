@@ -34,7 +34,8 @@
                     <td><?= 'Rp ' . (number_format($master->hrgbeli, 0)) ?></td>
                     <td><?= 'Rp ' .  (number_format($master->subtotal, 0)) ?></td>
                     <td>
-                        <a href="/master/print/<?= $master->nobukti; ?>" target="_blank" class="btn btn-s btn-warning"><i class="fa fa-print fa-xs"></i> Cetak</a>
+                        <a href="/master/e_penjualan/<?= $master->nobukti; ?>" type="submit" class="btn btn-warning"><i class="fa  fa-pencil">Edit</i></a>
+                        <a href="/master/print/<?= $master->nobukti; ?>" target="_blank" class="btn btn-s btn-info"><i class="fa fa-print fa-xs"></i> Cetak</a>
                     </td>
                 </tr>
             </tbody>
